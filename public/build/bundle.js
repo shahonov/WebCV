@@ -92,6 +92,16 @@ var app = (function () {
     function element(name) {
         return document.createElement(name);
     }
+    function text(data) {
+        return document.createTextNode(data);
+    }
+    function space() {
+        return text(' ');
+    }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -100,6 +110,9 @@ var app = (function () {
     }
     function children(element) {
         return Array.from(element.childNodes);
+    }
+    function toggle_class(element, name, toggle) {
+        element.classList[toggle ? 'add' : 'remove'](name);
     }
     function custom_event(type, detail, bubbles = false) {
         const e = document.createEvent('CustomEvent');
@@ -424,6 +437,96 @@ var app = (function () {
         : typeof globalThis !== 'undefined'
             ? globalThis
             : global);
+
+    function destroy_block(block, lookup) {
+        block.d(1);
+        lookup.delete(block.key);
+    }
+    function update_keyed_each(old_blocks, dirty, get_key, dynamic, ctx, list, lookup, node, destroy, create_each_block, next, get_context) {
+        let o = old_blocks.length;
+        let n = list.length;
+        let i = o;
+        const old_indexes = {};
+        while (i--)
+            old_indexes[old_blocks[i].key] = i;
+        const new_blocks = [];
+        const new_lookup = new Map();
+        const deltas = new Map();
+        i = n;
+        while (i--) {
+            const child_ctx = get_context(ctx, list, i);
+            const key = get_key(child_ctx);
+            let block = lookup.get(key);
+            if (!block) {
+                block = create_each_block(key, child_ctx);
+                block.c();
+            }
+            else if (dynamic) {
+                block.p(child_ctx, dirty);
+            }
+            new_lookup.set(key, new_blocks[i] = block);
+            if (key in old_indexes)
+                deltas.set(key, Math.abs(i - old_indexes[key]));
+        }
+        const will_move = new Set();
+        const did_move = new Set();
+        function insert(block) {
+            transition_in(block, 1);
+            block.m(node, next);
+            lookup.set(block.key, block);
+            next = block.first;
+            n--;
+        }
+        while (o && n) {
+            const new_block = new_blocks[n - 1];
+            const old_block = old_blocks[o - 1];
+            const new_key = new_block.key;
+            const old_key = old_block.key;
+            if (new_block === old_block) {
+                // do nothing
+                next = new_block.first;
+                o--;
+                n--;
+            }
+            else if (!new_lookup.has(old_key)) {
+                // remove old block
+                destroy(old_block, lookup);
+                o--;
+            }
+            else if (!lookup.has(new_key) || will_move.has(new_key)) {
+                insert(new_block);
+            }
+            else if (did_move.has(old_key)) {
+                o--;
+            }
+            else if (deltas.get(new_key) > deltas.get(old_key)) {
+                did_move.add(new_key);
+                insert(new_block);
+            }
+            else {
+                will_move.add(old_key);
+                o--;
+            }
+        }
+        while (o--) {
+            const old_block = old_blocks[o];
+            if (!new_lookup.has(old_block.key))
+                destroy(old_block, lookup);
+        }
+        while (n)
+            insert(new_blocks[n - 1]);
+        return new_blocks;
+    }
+    function validate_each_keys(ctx, list, get_context, get_key) {
+        const keys = new Set();
+        for (let i = 0; i < list.length; i++) {
+            const key = get_key(get_context(ctx, list, i));
+            if (keys.has(key)) {
+                throw new Error('Cannot have duplicate keys in a keyed each');
+            }
+            keys.add(key);
+        }
+    }
     function create_component(block) {
         block && block.c();
     }
@@ -568,12 +671,34 @@ var app = (function () {
         dispatch_dev('SvelteDOMRemove', { node });
         detach(node);
     }
+    function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+        const modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
+        if (has_prevent_default)
+            modifiers.push('preventDefault');
+        if (has_stop_propagation)
+            modifiers.push('stopPropagation');
+        dispatch_dev('SvelteDOMAddEventListener', { node, event, handler, modifiers });
+        const dispose = listen(node, event, handler, options);
+        return () => {
+            dispatch_dev('SvelteDOMRemoveEventListener', { node, event, handler, modifiers });
+            dispose();
+        };
+    }
     function attr_dev(node, attribute, value) {
         attr(node, attribute, value);
         if (value == null)
             dispatch_dev('SvelteDOMRemoveAttribute', { node, attribute });
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
+    }
+    function validate_each_argument(arg) {
+        if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+            let msg = '{#each} only iterates over array-like objects.';
+            if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+                msg += ' You can use a spread to convert this iterable into an array.';
+            }
+            throw new Error(msg);
+        }
     }
     function validate_slots(name, slot, keys) {
         for (const slot_key of Object.keys(slot)) {
@@ -1112,12 +1237,170 @@ var app = (function () {
     const { Object: Object_1 } = globals;
     const file = "src\\App.svelte";
 
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[9] = list[i];
+    	child_ctx[11] = i;
+    	return child_ctx;
+    }
+
+    function get_each_context_1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[9] = list[i];
+    	child_ctx[11] = i;
+    	return child_ctx;
+    }
+
+    // (74:3) {#each topControls as control, i (i)}
+    function create_each_block_1(key_1, ctx) {
+    	let div;
+    	let t0_value = /*control*/ ctx[9] + "";
+    	let t0;
+    	let t1;
+    	let mounted;
+    	let dispose;
+
+    	function click_handler() {
+    		return /*click_handler*/ ctx[4](/*control*/ ctx[9]);
+    	}
+
+    	const block = {
+    		key: key_1,
+    		first: null,
+    		c: function create() {
+    			div = element("div");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			attr_dev(div, "class", "nav-control svelte-1h3ko6z");
+    			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[9]);
+    			add_location(div, file, 74, 4, 2118);
+    			this.first = div;
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, t0);
+    			append_dev(div, t1);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div, "click", click_handler, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (dirty & /*currentSlide, topControls*/ 9) {
+    				toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[9]);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block_1.name,
+    		type: "each",
+    		source: "(74:3) {#each topControls as control, i (i)}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (90:3) {#each topControls as control, i (i)}
+    function create_each_block(key_1, ctx) {
+    	let div;
+    	let t0_value = /*i*/ ctx[11] + 1 + "";
+    	let t0;
+    	let t1;
+    	let mounted;
+    	let dispose;
+
+    	function click_handler_1() {
+    		return /*click_handler_1*/ ctx[5](/*control*/ ctx[9]);
+    	}
+
+    	const block = {
+    		key: key_1,
+    		first: null,
+    		c: function create() {
+    			div = element("div");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			attr_dev(div, "class", "nav-control svelte-1h3ko6z");
+    			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[9]);
+    			add_location(div, file, 90, 4, 2514);
+    			this.first = div;
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, t0);
+    			append_dev(div, t1);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div, "click", click_handler_1, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (dirty & /*currentSlide, topControls*/ 9) {
+    				toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[9]);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(90:3) {#each topControls as control, i (i)}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
     function create_fragment(ctx) {
     	let main;
-    	let div;
+    	let div5;
+    	let div0;
+    	let each_blocks_1 = [];
+    	let each0_lookup = new Map();
+    	let t0;
+    	let div1;
+    	let t1;
+    	let div2;
     	let switch_instance;
+    	let t2;
+    	let div3;
+    	let t3;
+    	let div4;
+    	let each_blocks = [];
+    	let each1_lookup = new Map();
     	let current;
-    	var switch_value = /*component*/ ctx[0];
+    	let each_value_1 = /*topControls*/ ctx[3];
+    	validate_each_argument(each_value_1);
+    	const get_key = ctx => /*i*/ ctx[11];
+    	validate_each_keys(ctx, each_value_1, get_each_context_1, get_key);
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		let child_ctx = get_each_context_1(ctx, each_value_1, i);
+    		let key = get_key(child_ctx);
+    		each0_lookup.set(key, each_blocks_1[i] = create_each_block_1(key, child_ctx));
+    	}
+
+    	var switch_value = /*component*/ ctx[1];
 
     	function switch_props(ctx) {
     		return { $$inline: true };
@@ -1127,31 +1410,97 @@ var app = (function () {
     		switch_instance = new switch_value(switch_props());
     	}
 
+    	let each_value = /*topControls*/ ctx[3];
+    	validate_each_argument(each_value);
+    	const get_key_1 = ctx => /*i*/ ctx[11];
+    	validate_each_keys(ctx, each_value, get_each_context, get_key_1);
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		let child_ctx = get_each_context(ctx, each_value, i);
+    		let key = get_key_1(child_ctx);
+    		each1_lookup.set(key, each_blocks[i] = create_each_block(key, child_ctx));
+    	}
+
     	const block = {
     		c: function create() {
     			main = element("main");
-    			div = element("div");
+    			div5 = element("div");
+    			div0 = element("div");
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].c();
+    			}
+
+    			t0 = space();
+    			div1 = element("div");
+    			t1 = space();
+    			div2 = element("div");
     			if (switch_instance) create_component(switch_instance.$$.fragment);
-    			attr_dev(div, "class", "main-screen svelte-1duayxf");
-    			add_location(div, file, 69, 1, 1948);
-    			attr_dev(main, "class", "svelte-1duayxf");
-    			add_location(main, file, 68, 0, 1939);
+    			t2 = space();
+    			div3 = element("div");
+    			t3 = space();
+    			div4 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr_dev(div0, "class", "top-controls svelte-1h3ko6z");
+    			add_location(div0, file, 72, 2, 2044);
+    			attr_dev(div1, "class", "left-arrow svelte-1h3ko6z");
+    			add_location(div1, file, 83, 2, 2299);
+    			attr_dev(div2, "class", "content svelte-1h3ko6z");
+    			add_location(div2, file, 84, 2, 2329);
+    			attr_dev(div3, "class", "right-arrow svelte-1h3ko6z");
+    			add_location(div3, file, 87, 2, 2406);
+    			attr_dev(div4, "class", "bottom-controls svelte-1h3ko6z");
+    			add_location(div4, file, 88, 2, 2437);
+    			attr_dev(div5, "class", "main-screen svelte-1h3ko6z");
+    			add_location(div5, file, 71, 1, 2015);
+    			attr_dev(main, "class", "svelte-1h3ko6z");
+    			add_location(main, file, 70, 0, 2006);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
-    			append_dev(main, div);
+    			append_dev(main, div5);
+    			append_dev(div5, div0);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].m(div0, null);
+    			}
+
+    			append_dev(div5, t0);
+    			append_dev(div5, div1);
+    			append_dev(div5, t1);
+    			append_dev(div5, div2);
 
     			if (switch_instance) {
-    				mount_component(switch_instance, div, null);
+    				mount_component(switch_instance, div2, null);
+    			}
+
+    			append_dev(div5, t2);
+    			append_dev(div5, div3);
+    			append_dev(div5, t3);
+    			append_dev(div5, div4);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div4, null);
     			}
 
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (switch_value !== (switch_value = /*component*/ ctx[0])) {
+    			if (dirty & /*currentSlide, topControls, changeSlide*/ 13) {
+    				each_value_1 = /*topControls*/ ctx[3];
+    				validate_each_argument(each_value_1);
+    				validate_each_keys(ctx, each_value_1, get_each_context_1, get_key);
+    				each_blocks_1 = update_keyed_each(each_blocks_1, dirty, get_key, 1, ctx, each_value_1, each0_lookup, div0, destroy_block, create_each_block_1, null, get_each_context_1);
+    			}
+
+    			if (switch_value !== (switch_value = /*component*/ ctx[1])) {
     				if (switch_instance) {
     					group_outros();
     					const old_component = switch_instance;
@@ -1167,10 +1516,17 @@ var app = (function () {
     					switch_instance = new switch_value(switch_props());
     					create_component(switch_instance.$$.fragment);
     					transition_in(switch_instance.$$.fragment, 1);
-    					mount_component(switch_instance, div, null);
+    					mount_component(switch_instance, div2, null);
     				} else {
     					switch_instance = null;
     				}
+    			}
+
+    			if (dirty & /*currentSlide, topControls, changeSlide*/ 13) {
+    				each_value = /*topControls*/ ctx[3];
+    				validate_each_argument(each_value);
+    				validate_each_keys(ctx, each_value, get_each_context, get_key_1);
+    				each_blocks = update_keyed_each(each_blocks, dirty, get_key_1, 1, ctx, each_value, each1_lookup, div4, destroy_block, create_each_block, null, get_each_context);
     			}
     		},
     		i: function intro(local) {
@@ -1184,7 +1540,16 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].d();
+    			}
+
     			if (switch_instance) destroy_component(switch_instance);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].d();
+    			}
     		}
     	};
 
@@ -1206,22 +1571,22 @@ var app = (function () {
     	validate_slots('App', slots, []);
 
     	const slides = {
-    		overview: OverviewSlide,
-    		experience: ExperienceSlide,
-    		techSkills: TechnicalSkillsSlide,
-    		softSkills: SoftSkillsSlide,
-    		playground: PlaygroundSlide
+    		["Overview"]: OverviewSlide,
+    		["Experience"]: ExperienceSlide,
+    		["Tech Skills"]: TechnicalSkillsSlide,
+    		["Soft Skills"]: SoftSkillsSlide,
+    		["Playground"]: PlaygroundSlide
     	};
 
-    	let currentSlide = "overview";
+    	let currentSlide = "Overview";
 
     	function changeSlide(slide) {
     		if (slide !== currentSlide) {
-    			$$invalidate(1, currentSlide = "");
+    			$$invalidate(0, currentSlide = "");
 
     			setTimeout(
     				() => {
-    					$$invalidate(1, currentSlide = slide);
+    					$$invalidate(0, currentSlide = slide);
     				},
     				slidesConfig.speed
     			);
@@ -1246,12 +1611,12 @@ var app = (function () {
     		if (ev.code === "ArrowRight") {
     			if (currentSlideIndex < Object.keys(slides).length - 1) {
     				const prevIndex = currentSlideIndex;
-    				$$invalidate(1, currentSlide = "");
+    				$$invalidate(0, currentSlide = "");
 
     				setTimeout(
     					() => {
     						const nextIndex = prevIndex + 1;
-    						$$invalidate(1, currentSlide = Object.keys(slides)[nextIndex]);
+    						$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
     					},
     					slidesConfig.speed
     				);
@@ -1259,12 +1624,12 @@ var app = (function () {
     		} else if (ev.code === "ArrowLeft") {
     			if (currentSlideIndex > 0) {
     				const prevIndex = currentSlideIndex;
-    				$$invalidate(1, currentSlide = "");
+    				$$invalidate(0, currentSlide = "");
 
     				setTimeout(
     					() => {
     						const nextIndex = prevIndex - 1;
-    						$$invalidate(1, currentSlide = Object.keys(slides)[nextIndex]);
+    						$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
     					},
     					slidesConfig.speed
     				);
@@ -1272,11 +1637,15 @@ var app = (function () {
     		}
     	});
 
+    	const topControls = Object.keys(slides);
     	const writable_props = [];
 
     	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
     	});
+
+    	const click_handler = control => changeSlide(control);
+    	const click_handler_1 = control => changeSlide(control);
 
     	$$self.$capture_state = () => ({
     		setContext,
@@ -1292,15 +1661,16 @@ var app = (function () {
     		currentSlide,
     		changeSlide,
     		lastCall,
+    		topControls,
     		currentSlideIndex,
     		component
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('currentSlide' in $$props) $$invalidate(1, currentSlide = $$props.currentSlide);
+    		if ('currentSlide' in $$props) $$invalidate(0, currentSlide = $$props.currentSlide);
     		if ('lastCall' in $$props) lastCall = $$props.lastCall;
     		if ('currentSlideIndex' in $$props) currentSlideIndex = $$props.currentSlideIndex;
-    		if ('component' in $$props) $$invalidate(0, component = $$props.component);
+    		if ('component' in $$props) $$invalidate(1, component = $$props.component);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -1308,16 +1678,23 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*currentSlide*/ 2) {
+    		if ($$self.$$.dirty & /*currentSlide*/ 1) {
     			currentSlideIndex = Object.keys(slides).indexOf(currentSlide);
     		}
 
-    		if ($$self.$$.dirty & /*currentSlide*/ 2) {
-    			$$invalidate(0, component = slides[currentSlide]);
+    		if ($$self.$$.dirty & /*currentSlide*/ 1) {
+    			$$invalidate(1, component = slides[currentSlide]);
     		}
     	};
 
-    	return [component, currentSlide];
+    	return [
+    		currentSlide,
+    		component,
+    		changeSlide,
+    		topControls,
+    		click_handler,
+    		click_handler_1
+    	];
     }
 
     class App extends SvelteComponentDev {
