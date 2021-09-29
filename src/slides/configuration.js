@@ -1,3 +1,3 @@
 export const slidesConfig = {
-    speed: 300,
+    speed: 500,
 }

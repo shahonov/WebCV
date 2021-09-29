@@ -1,6 +1,6 @@
 <script>
 	import { setContext } from "svelte";
-	import { slide, blur } from "svelte/transition";
+	import { blur, fade } from "svelte/transition";
 
 	import Overview from "./slides/OverviewSlide.svelte";
 	import Experience from "./slides/ExperienceSlide.svelte";
@@ -33,7 +33,7 @@
 
 	setContext("global", {
 		changeSlide,
-		inT: (node) => slide(node, { delay: 0, duration: slidesConfig.speed }),
+		inT: (node) => fade(node, { delay: 0, duration: slidesConfig.speed }),
 		outT: (node) => blur(node, { delay: 0, duration: slidesConfig.speed }),
 	});
 
@@ -74,12 +74,11 @@
 
 <style>
 	main {
-		width: 99vw;
-		height: 98vh;
+		width: 100vw;
+		height: 100vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: 1px solid black;
 	}
 
 	.main-screen {
