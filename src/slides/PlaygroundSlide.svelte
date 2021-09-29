@@ -27,7 +27,7 @@
     .playground-slide {
         width: 100%;
         height: 100%;
-        opacity: 0.9;
+        opacity: 0.95;
         display: flex;
         color: $mediumGrey;
         align-items: center;
