@@ -12,7 +12,9 @@
     </div>
 </section>
 
-<style>
+<style lang="scss">
+    @import "./configuration.scss";
+
     .slide {
         left: 0;
         width: 100%;
@@ -25,9 +27,11 @@
     .overview-slide {
         width: 100%;
         height: 100%;
+        opacity: 0.90;
         display: flex;
+        color: $mediumGrey;
         align-items: center;
         justify-content: center;
-        background-color: #ccc;
+        background-color: $black;
     }
 </style>

@@ -12,7 +12,9 @@
     </div>
 </section>
 
-<style>
+<style lang="scss">
+    @import "./configuration.scss";
+
     .slide {
         width: 100%;
         height: 100%;
@@ -24,9 +26,11 @@
     .experience-slide {
         width: 100%;
         height: 100%;
+        opacity: 0.9;
         display: flex;
+        color: $mediumGrey;
         align-items: center;
         justify-content: center;
-        background-color: #ddd;
+        background-color: $black;
     }
 </style>

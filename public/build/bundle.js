@@ -771,9 +771,9 @@ var app = (function () {
     			h1 = element("h1");
     			h1.textContent = "Overview slide";
     			add_location(h1, file$5, 10, 8, 231);
-    			attr_dev(div, "class", "overview-slide svelte-dptcvq");
+    			attr_dev(div, "class", "overview-slide svelte-1kz9wzj");
     			add_location(div, file$5, 9, 4, 193);
-    			attr_dev(section, "class", "slide svelte-dptcvq");
+    			attr_dev(section, "class", "slide svelte-1kz9wzj");
     			add_location(section, file$5, 8, 0, 148);
     		},
     		l: function claim(nodes) {
@@ -866,9 +866,9 @@ var app = (function () {
     			h1 = element("h1");
     			h1.textContent = "Experience slide";
     			add_location(h1, file$4, 10, 8, 233);
-    			attr_dev(div, "class", "experience-slide svelte-1w3cyc");
+    			attr_dev(div, "class", "experience-slide svelte-ug7h58");
     			add_location(div, file$4, 9, 4, 193);
-    			attr_dev(section, "class", "slide svelte-1w3cyc");
+    			attr_dev(section, "class", "slide svelte-ug7h58");
     			add_location(section, file$4, 8, 0, 148);
     		},
     		l: function claim(nodes) {
@@ -961,9 +961,9 @@ var app = (function () {
     			h1 = element("h1");
     			h1.textContent = "Soft skills slide";
     			add_location(h1, file$3, 10, 8, 234);
-    			attr_dev(div, "class", "soft-skills-slide svelte-169jjls");
+    			attr_dev(div, "class", "soft-skills-slide svelte-8x2coj");
     			add_location(div, file$3, 9, 4, 193);
-    			attr_dev(section, "class", "slide svelte-169jjls");
+    			attr_dev(section, "class", "slide svelte-8x2coj");
     			add_location(section, file$3, 8, 0, 148);
     		},
     		l: function claim(nodes) {
@@ -1056,9 +1056,9 @@ var app = (function () {
     			h1 = element("h1");
     			h1.textContent = "Playground slide";
     			add_location(h1, file$2, 10, 8, 233);
-    			attr_dev(div, "class", "playground-slide svelte-1544eus");
+    			attr_dev(div, "class", "playground-slide svelte-13fgux5");
     			add_location(div, file$2, 9, 4, 193);
-    			attr_dev(section, "class", "slide svelte-1544eus");
+    			attr_dev(section, "class", "slide svelte-13fgux5");
     			add_location(section, file$2, 8, 0, 148);
     		},
     		l: function claim(nodes) {
@@ -1151,9 +1151,9 @@ var app = (function () {
     			h1 = element("h1");
     			h1.textContent = "Technical skills slide";
     			add_location(h1, file$1, 10, 8, 239);
-    			attr_dev(div, "class", "technical-skills-slide svelte-p4ejsj");
+    			attr_dev(div, "class", "technical-skills-slide svelte-1hhhrwo");
     			add_location(div, file$1, 9, 4, 193);
-    			attr_dev(section, "class", "slide svelte-p4ejsj");
+    			attr_dev(section, "class", "slide svelte-1hhhrwo");
     			add_location(section, file$1, 8, 0, 148);
     		},
     		l: function claim(nodes) {
