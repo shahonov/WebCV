@@ -223,7 +223,7 @@
 </main>
 
 <style lang="scss">
-	@import "./slides/configuration.scss";
+	@import "./slides/styles.scss";
 
 	main {
 		width: 100vw;
