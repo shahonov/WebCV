@@ -126,19 +126,23 @@
 				justify-content: center;
 
 				.nav-control {
+					width: 10%;
+					padding: 1vh;
 					cursor: pointer;
-					padding: 1vh 2vw;
 					color: $darkGrey;
+					text-align: center;
 					transition: $transitionTime;
 					border-bottom: 3px solid $black;
 
 					&.active {
+						width: 15%;
 						color: $lightGrey;
 						transition: $transitionTime;
 						border-bottom: 3px solid $darkRed;
 					}
 
 					&:hover {
+						width: 12.5%;
 						color: $mediumGrey;
 						border-bottom: 3px solid $mediumGrey;
 					}
@@ -168,19 +172,23 @@
 				justify-content: center;
 
 				.nav-control {
+					width: 5%;
+					padding: 1vh;
 					cursor: pointer;
-					padding: 1vh 2vw;
-					color: $mediumGrey;
+					color: $darkGrey;
+					text-align: center;
 					transition: $transitionTime;
 					border-bottom: 3px solid $black;
 
 					&.active {
+						width: 10%;
 						color: $lightGrey;
 						transition: $transitionTime;
 						border-bottom: 3px solid $darkRed;
 					}
 
 					&:hover {
+						width: 7.5%;
 						color: $mediumGrey;
 						border-bottom: 3px solid $mediumGrey;
 					}

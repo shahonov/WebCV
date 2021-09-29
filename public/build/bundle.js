@@ -1271,7 +1271,7 @@ var app = (function () {
     			div = element("div");
     			t0 = text(t0_value);
     			t1 = space();
-    			attr_dev(div, "class", "nav-control svelte-1h3ko6z");
+    			attr_dev(div, "class", "nav-control svelte-15z7p6z");
     			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[9]);
     			add_location(div, file, 74, 4, 2118);
     			this.first = div;
@@ -1331,7 +1331,7 @@ var app = (function () {
     			div = element("div");
     			t0 = text(t0_value);
     			t1 = space();
-    			attr_dev(div, "class", "nav-control svelte-1h3ko6z");
+    			attr_dev(div, "class", "nav-control svelte-15z7p6z");
     			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[9]);
     			add_location(div, file, 90, 4, 2514);
     			this.first = div;
@@ -1445,19 +1445,19 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div0, "class", "top-controls svelte-1h3ko6z");
+    			attr_dev(div0, "class", "top-controls svelte-15z7p6z");
     			add_location(div0, file, 72, 2, 2044);
-    			attr_dev(div1, "class", "left-arrow svelte-1h3ko6z");
+    			attr_dev(div1, "class", "left-arrow svelte-15z7p6z");
     			add_location(div1, file, 83, 2, 2299);
-    			attr_dev(div2, "class", "content svelte-1h3ko6z");
+    			attr_dev(div2, "class", "content svelte-15z7p6z");
     			add_location(div2, file, 84, 2, 2329);
-    			attr_dev(div3, "class", "right-arrow svelte-1h3ko6z");
+    			attr_dev(div3, "class", "right-arrow svelte-15z7p6z");
     			add_location(div3, file, 87, 2, 2406);
-    			attr_dev(div4, "class", "bottom-controls svelte-1h3ko6z");
+    			attr_dev(div4, "class", "bottom-controls svelte-15z7p6z");
     			add_location(div4, file, 88, 2, 2437);
-    			attr_dev(div5, "class", "main-screen svelte-1h3ko6z");
+    			attr_dev(div5, "class", "main-screen svelte-15z7p6z");
     			add_location(div5, file, 71, 1, 2015);
-    			attr_dev(main, "class", "svelte-1h3ko6z");
+    			attr_dev(main, "class", "svelte-15z7p6z");
     			add_location(main, file, 70, 0, 2006);
     		},
     		l: function claim(nodes) {
