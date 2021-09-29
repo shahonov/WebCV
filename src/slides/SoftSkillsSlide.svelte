@@ -1,6 +1,5 @@
 <script>
     import { onMount, getContext } from "svelte";
-    import { slidesConfig } from "./configuration";
 
     const globals = getContext("global");
     const { inT, outT } = globals;
@@ -9,10 +8,19 @@
         const parallaxElements = document.getElementsByClassName("parallax");
         window.addEventListener("mousemove", (e) => {
             for (const element of parallaxElements) {
-                const width = e.pageX * slidesConfig.parallaxMultiplier;
-                const height = e.pageY * slidesConfig.parallaxMultiplier;
-                const x = (window.innerWidth - width) / 100;
-                const y = (window.innerHeight - height) / 100;
+                const sign = element.getAttribute("sign");
+                const speed = element.getAttribute("speed");
+                const width = e.pageX * speed;
+                const height = e.pageY * speed;
+                let x = 0;
+                let y = 0;
+                if (sign === "+") {
+                    x = (window.innerWidth + width) / 100;
+                    y = (window.innerHeight + height) / 100;
+                } else if (sign === "-") {
+                    x = (window.innerWidth - width) / 100;
+                    y = (window.innerHeight - height) / 100;
+                }
                 element.style.transform = `translateX(${x}px) translateY(${y}px)`;
             }
         });
@@ -21,7 +29,10 @@
 
 <section in:inT out:outT class="slide">
     <div class="soft-skills-slide">
-        <h1 class="parallax">Soft skills slide</h1>
+        <h1 class="parallax" speed='4' sign='+'>Soft skills slide</h1>
+        <h1 class="parallax" speed='8' sign='+'>Soft skills slide</h1>
+        <h1 class="parallax" speed='12' sign='-'>Soft skills slide</h1>
+        <h1 class="parallax" speed='16' sign='-'>Soft skills slide</h1>
     </div>
 </section>
 
