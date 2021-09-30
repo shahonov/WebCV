@@ -40,6 +40,12 @@
 				const nextIndex = prevIndex + 1;
 				currentSlide = Object.keys(slides)[nextIndex];
 			}, slidesConfig.speed);
+		} else {
+			currentSlide = "";
+			setTimeout(() => {
+				const nextIndex = 0;
+				currentSlide = Object.keys(slides)[nextIndex];
+			}, slidesConfig.speed);
 		}
 	}
 
@@ -49,6 +55,12 @@
 			currentSlide = "";
 			setTimeout(() => {
 				const nextIndex = prevIndex - 1;
+				currentSlide = Object.keys(slides)[nextIndex];
+			}, slidesConfig.speed);
+		} else {
+			currentSlide = "";
+			setTimeout(() => {
+				const nextIndex = Object.keys(slides).length - 1;
 				currentSlide = Object.keys(slides)[nextIndex];
 			}, slidesConfig.speed);
 		}
@@ -65,26 +77,11 @@
 		if (lastCall + slidesConfig.speed > Date.now()) {
 			return;
 		}
-
 		lastCall = Date.now();
 		if (ev.code === "ArrowRight") {
-			if (currentSlideIndex < Object.keys(slides).length - 1) {
-				const prevIndex = currentSlideIndex;
-				currentSlide = "";
-				setTimeout(() => {
-					const nextIndex = prevIndex + 1;
-					currentSlide = Object.keys(slides)[nextIndex];
-				}, slidesConfig.speed);
-			}
+			nextSlide();
 		} else if (ev.code === "ArrowLeft") {
-			if (currentSlideIndex > 0) {
-				const prevIndex = currentSlideIndex;
-				currentSlide = "";
-				setTimeout(() => {
-					const nextIndex = prevIndex - 1;
-					currentSlide = Object.keys(slides)[nextIndex];
-				}, slidesConfig.speed);
-			}
+			prevSlide();
 		}
 	});
 

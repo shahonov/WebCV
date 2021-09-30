@@ -2145,7 +2145,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (112:3) {#each topControls as control, i (i)}
+    // (109:3) {#each topControls as control, i (i)}
     function create_each_block_1(key_1, ctx) {
     	let div;
     	let t0_value = /*control*/ ctx[19] + "";
@@ -2167,7 +2167,7 @@ var app = (function () {
     			t1 = space();
     			attr_dev(div, "class", "nav-control svelte-1fd4b3t");
     			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[19]);
-    			add_location(div, file, 112, 4, 3203);
+    			add_location(div, file, 109, 4, 3063);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -2198,14 +2198,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(112:3) {#each topControls as control, i (i)}",
+    		source: "(109:3) {#each topControls as control, i (i)}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (212:3) {#each topControls as control, i (i)}
+    // (209:3) {#each topControls as control, i (i)}
     function create_each_block(key_1, ctx) {
     	let div;
     	let t0_value = /*i*/ ctx[21] + 1 + "";
@@ -2227,7 +2227,7 @@ var app = (function () {
     			t1 = space();
     			attr_dev(div, "class", "nav-control svelte-1fd4b3t");
     			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[19]);
-    			add_location(div, file, 212, 4, 5539);
+    			add_location(div, file, 209, 4, 5399);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -2258,7 +2258,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(212:3) {#each topControls as control, i (i)}",
+    		source: "(209:3) {#each topControls as control, i (i)}",
     		ctx
     	});
 
@@ -2350,33 +2350,33 @@ var app = (function () {
     			}
 
     			attr_dev(div0, "class", "top-controls svelte-1fd4b3t");
-    			add_location(div0, file, 110, 2, 3129);
+    			add_location(div0, file, 107, 2, 2989);
     			attr_dev(path0, "d", "m213.667969 \r\n\t\t\t\t\t181.332031c0 \r\n\t\t\t\t\t4.269531-1.28125 \r\n\t\t\t\t\t8.535157-3.628907 \r\n\t\t\t\t\t11.734375l-106.664062 \r\n\t\t\t\t\t160c-3.839844 \r\n\t\t\t\t\t5.761719-10.242188 \r\n\t\t\t\t\t9.601563-17.707031 \r\n\t\t\t\t\t9.601563h-64c-11.734375 \r\n\t\t\t\t\t0-21.335938-9.601563-21.335938-21.335938 \r\n\t\t\t\t\t0-4.265625 \r\n\t\t\t\t\t1.28125-8.53125 \r\n\t\t\t\t\t3.628907-11.730469l98.773437-148.269531-98.773437-148.265625c-2.347657-3.199218-3.628907-7.464844-3.628907-11.734375 \r\n\t\t\t\t\t0-11.730469 \r\n\t\t\t\t\t9.601563-21.332031 \r\n\t\t\t\t\t21.335938-21.332031h64c7.464843 \r\n\t\t\t\t\t0 \r\n\t\t\t\t\t13.867187 \r\n\t\t\t\t\t3.839844 \r\n\t\t\t\t\t17.707031 \r\n\t\t\t\t\t9.601562l106.664062 \r\n\t\t\t\t\t160c2.347657 \r\n\t\t\t\t\t3.199219 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t7.464844 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t11.730469zm0 \r\n\t\t\t\t\t0");
-    			add_location(path0, file, 132, 4, 3626);
+    			add_location(path0, file, 129, 4, 3486);
     			attr_dev(svg0, "fill", /*prevArrowColor*/ ctx[2]);
     			attr_dev(svg0, "viewBox", "-74 0 362 362.66667");
     			attr_dev(svg0, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg0, "class", "svelte-1fd4b3t");
-    			add_location(svg0, file, 127, 3, 3508);
+    			add_location(svg0, file, 124, 3, 3368);
     			attr_dev(div1, "class", "left-arrow svelte-1fd4b3t");
-    			add_location(div1, file, 121, 2, 3384);
+    			add_location(div1, file, 118, 2, 3244);
     			attr_dev(div2, "class", "content svelte-1fd4b3t");
-    			add_location(div2, file, 164, 2, 4384);
+    			add_location(div2, file, 161, 2, 4244);
     			attr_dev(path1, "d", "m213.667969 \r\n\t\t\t\t\t181.332031c0 \r\n\t\t\t\t\t4.269531-1.28125 \r\n\t\t\t\t\t8.535157-3.628907 \r\n\t\t\t\t\t11.734375l-106.664062 \r\n\t\t\t\t\t160c-3.839844 \r\n\t\t\t\t\t5.761719-10.242188 \r\n\t\t\t\t\t9.601563-17.707031 \r\n\t\t\t\t\t9.601563h-64c-11.734375 \r\n\t\t\t\t\t0-21.335938-9.601563-21.335938-21.335938 \r\n\t\t\t\t\t0-4.265625 \r\n\t\t\t\t\t1.28125-8.53125 \r\n\t\t\t\t\t3.628907-11.730469l98.773437-148.269531-98.773437-148.265625c-2.347657-3.199218-3.628907-7.464844-3.628907-11.734375 \r\n\t\t\t\t\t0-11.730469 \r\n\t\t\t\t\t9.601563-21.332031 \r\n\t\t\t\t\t21.335938-21.332031h64c7.464843 \r\n\t\t\t\t\t0 \r\n\t\t\t\t\t13.867187 \r\n\t\t\t\t\t3.839844 \r\n\t\t\t\t\t17.707031 \r\n\t\t\t\t\t9.601562l106.664062 \r\n\t\t\t\t\t160c2.347657 \r\n\t\t\t\t\t3.199219 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t7.464844 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t11.730469zm0 \r\n\t\t\t\t\t0");
-    			add_location(path1, file, 178, 4, 4704);
+    			add_location(path1, file, 175, 4, 4564);
     			attr_dev(svg1, "fill", /*nextArrowColor*/ ctx[1]);
     			attr_dev(svg1, "viewBox", "-74 0 362 362.66667");
     			attr_dev(svg1, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg1, "class", "svelte-1fd4b3t");
-    			add_location(svg1, file, 173, 3, 4586);
+    			add_location(svg1, file, 170, 3, 4446);
     			attr_dev(div3, "class", "right-arrow svelte-1fd4b3t");
-    			add_location(div3, file, 167, 2, 4461);
+    			add_location(div3, file, 164, 2, 4321);
     			attr_dev(div4, "class", "bottom-controls svelte-1fd4b3t");
-    			add_location(div4, file, 210, 2, 5462);
+    			add_location(div4, file, 207, 2, 5322);
     			attr_dev(div5, "class", "main-screen svelte-1fd4b3t");
-    			add_location(div5, file, 109, 1, 3100);
+    			add_location(div5, file, 106, 1, 2960);
     			attr_dev(main, "class", "svelte-1fd4b3t");
-    			add_location(main, file, 108, 0, 3091);
+    			add_location(main, file, 105, 0, 2951);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2553,6 +2553,16 @@ var app = (function () {
     				},
     				slidesConfig.speed
     			);
+    		} else {
+    			$$invalidate(0, currentSlide = "");
+
+    			setTimeout(
+    				() => {
+    					const nextIndex = 0;
+    					$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
+    				},
+    				slidesConfig.speed
+    			);
     		}
     	}
 
@@ -2564,6 +2574,16 @@ var app = (function () {
     			setTimeout(
     				() => {
     					const nextIndex = prevIndex - 1;
+    					$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
+    				},
+    				slidesConfig.speed
+    			);
+    		} else {
+    			$$invalidate(0, currentSlide = "");
+
+    			setTimeout(
+    				() => {
+    					const nextIndex = Object.keys(slides).length - 1;
     					$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
     				},
     				slidesConfig.speed
@@ -2587,31 +2607,9 @@ var app = (function () {
     		lastCall = Date.now();
 
     		if (ev.code === "ArrowRight") {
-    			if (currentSlideIndex < Object.keys(slides).length - 1) {
-    				const prevIndex = currentSlideIndex;
-    				$$invalidate(0, currentSlide = "");
-
-    				setTimeout(
-    					() => {
-    						const nextIndex = prevIndex + 1;
-    						$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
-    					},
-    					slidesConfig.speed
-    				);
-    			}
+    			nextSlide();
     		} else if (ev.code === "ArrowLeft") {
-    			if (currentSlideIndex > 0) {
-    				const prevIndex = currentSlideIndex;
-    				$$invalidate(0, currentSlide = "");
-
-    				setTimeout(
-    					() => {
-    						const nextIndex = prevIndex - 1;
-    						$$invalidate(0, currentSlide = Object.keys(slides)[nextIndex]);
-    					},
-    					slidesConfig.speed
-    				);
-    			}
+    			prevSlide();
     		}
     	});
 
