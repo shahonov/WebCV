@@ -1,38 +1,56 @@
 <script>
     import { onMount, getContext } from "svelte";
 
+    import Clustermarket from "./experiences/Clustermarket.svelte";
+    import MotionSoftware from "./experiences/MotionSoftware.svelte";
+    import SbTech from "./experiences/SBTech.svelte";
+
+    import { slidesConfig } from "./configuration";
+
+    const tabs = {
+        ["SBTech"]: SbTech,
+        ["Motion Software"]: MotionSoftware,
+        ["Clustermarket"]: Clustermarket,
+    };
+
+    let currentTab = "Clustermarket";
+    $: component = tabs[currentTab];
+
+    function changeTab(tab) {
+        if (tab !== currentTab) {
+            currentTab = "";
+            setTimeout(() => {
+                currentTab = tab;
+            }, slidesConfig.speed);
+        }
+    }
+
     const globals = getContext("global");
     const { inT, outT } = globals;
 
     onMount(() => {
-        const parallaxElements = document.getElementsByClassName("parallax");
-        window.addEventListener("mousemove", (e) => {
-            for (const element of parallaxElements) {
-                const sign = element.getAttribute("sign");
-                const speed = element.getAttribute("speed");
-                const width = e.pageX * speed;
-                const height = e.pageY * speed;
-                let x = 0;
-                let y = 0;
-                if (sign === "+") {
-                    x = (window.innerWidth + width) / 100;
-                    y = (window.innerHeight + height) / 100;
-                } else if (sign === "-") {
-                    x = (window.innerWidth - width) / 100;
-                    y = (window.innerHeight - height) / 100;
-                }
-                element.style.transform = `translateX(${x}px) translateY(${y}px)`;
-            }
-        });
+        slidesConfig.loadParallax();
     });
 </script>
 
 <section in:inT out:outT class="slide">
-    <div id="current-slide" class="experience-slide">
-        <h1 class="parallax" speed='5' sign='+'>Experience slide</h1>
-        <h1 class="parallax" speed='15' sign='-'>Experience slide</h1>
-        <h1 class="parallax" speed='10' sign='+'>Experience slide</h1>
-        <h1 class="parallax" speed='20' sign='-'>Experience slide</h1>
+    <div class="experience-slide">
+        <nav class="tabs parallax" speed="2" sign="-">
+            {#each Object.keys(tabs) as tab, i (i)}
+                <h4
+                    class="tab"
+                    on:click={() => changeTab(tab)}
+                    class:active={tab === currentTab}
+                >
+                    {tab}
+                </h4>
+            {/each}
+        </nav>
+        <div class="content">
+            <div class="parallax main" speed="5" sign="+">
+                <svelte:component this={component} />
+            </div>
+        </div>
     </div>
 </section>
 
@@ -42,9 +60,6 @@
     .slide {
         width: 100%;
         height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
 
         .experience-slide {
             width: 100%;
@@ -53,13 +68,42 @@
             display: flex;
             flex-wrap: wrap;
             color: $mediumGrey;
-            align-items: center;
-            justify-content: center;
             background-color: $black;
 
-            .parallax {
+            nav.tabs {
                 width: 100%;
-                text-align: center;
+                height: 10%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .tab {
+                    width: 15%;
+                    padding: 1vh;
+                    cursor: pointer;
+                    color: $darkGrey;
+                    text-align: center;
+                    transition: $transitionTime;
+                    border-bottom: 3px solid $black;
+
+                    &.active {
+                        width: 20%;
+                        color: $lightGrey;
+                        transition: $transitionTime;
+                        border-bottom: 3px solid $darkRed;
+                    }
+
+                    &:hover {
+                        width: 17.5%;
+                        color: $mediumGrey;
+                        border-bottom: 3px solid $mediumGrey;
+                    }
+                }
+            }
+
+            div.content {
+                width: 100%;
+                height: 90%;
             }
         }
     }

@@ -19,7 +19,7 @@
 		["Playground"]: Playground,
 	};
 
-	let currentSlide = "Overview";
+	let currentSlide = "Experience";
 	$: currentSlideIndex = Object.keys(slides).indexOf(currentSlide);
 	$: component = slides[currentSlide];
 
