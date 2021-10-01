@@ -1,44 +1,20 @@
-<div class="experience-info">
-    <div class="period">
-        <h3>2020-2021</h3>
-    </div>
-    <div class="overview">
-        <p>Some brief overview on what we were developing</p>
-    </div>
-    <div class="tech-stack">
-        <ul>
-            <li>JavaScript</li>
-            <li>React</li>
-            <li>Redux</li>
-            <li>Node.js</li>
-            <li>MongoDB</li>
-        </ul>
-    </div>
-    <div class="org-stack">
-        <p>Like Jira, GitLab, Agile, etc.</p>
-    </div>
-</div>
+<script>
+    import Template from "./ExperienceTamplate.svelte";
 
-<style lang="scss">
-    @import "../styles.css";
+    const period = "2020 - 2021";
+    const techs = [
+        "JavaScript",
+        "React",
+        "Redux",
+        "NodeJS",
+        "MongoDB",
+        "Firebase",
+    ];
+    const orgs = ["Windows", "GitHub", "Telegram", "Agile"];
+</script>
 
-    .experience-info {
-        display: flex;
-
-        .period {
-            color: white;
-        }
-
-        .overview {
-            color: white;
-        }
-
-        .tech-stack {
-            color: white;
-        }
-
-        .org-stack {
-            color: white;
-        }
-    }
-</style>
+<Template {period} {techs} {orgs}>
+    Outsource consulting company.
+    <br />
+    Developed different projects for local and foreign markets.
+</Template>

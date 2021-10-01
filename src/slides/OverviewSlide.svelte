@@ -12,10 +12,10 @@
 
 <section in:inT out:outT class="slide">
     <div class="overview-slide">
-        <h1 class="parallax" speed="12" sign="+">Overview slide</h1>
-        <h1 class="parallax" speed="5" sign="-">Overview slide</h1>
-        <h1 class="parallax" speed="17" sign="-">Overview slide</h1>
-        <h1 class="parallax" speed="10" sign="+">Overview slide</h1>
+        <h1 class="parallax" sign='+'>Overview slide</h1>
+        <h1 class="parallax" sign='+'>Overview slide</h1>
+        <h1 class="parallax" sign='+'>Overview slide</h1>
+        <h1 class="parallax" sign='+'>Overview slide</h1>
     </div>
 </section>
 

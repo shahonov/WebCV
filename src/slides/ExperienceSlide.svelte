@@ -35,7 +35,7 @@
 
 <section in:inT out:outT class="slide">
     <div class="experience-slide">
-        <nav class="tabs parallax" speed="2" sign="-">
+        <nav class="tabs parallax" sign="-">
             {#each Object.keys(tabs) as tab, i (i)}
                 <h4
                     class="tab"
@@ -47,9 +47,7 @@
             {/each}
         </nav>
         <div class="content">
-            <div class="parallax main" speed="5" sign="+">
-                <svelte:component this={component} />
-            </div>
+            <svelte:component this={component} />
         </div>
     </div>
 </section>

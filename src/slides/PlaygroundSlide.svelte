@@ -12,10 +12,7 @@
 
 <section in:inT out:outT class="slide">
     <div class="playground-slide">
-        <h1 class="parallax" speed="4" sign="+">Playground slide</h1>
-        <h1 class="parallax" speed="10" sign="+">Playground slide</h1>
-        <h1 class="parallax" speed="15" sign="-">Playground slide</h1>
-        <h1 class="parallax" speed="8" sign="+">Playground slide</h1>
+        <h1 class="parallax" sign="-">Playground slide</h1>
     </div>
 </section>
 

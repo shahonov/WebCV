@@ -12,10 +12,10 @@
 
 <section in:inT out:outT class="slide">
     <div class="soft-skills-slide">
-        <h1 class="parallax" speed="4" sign="+">Soft skills slide</h1>
-        <h1 class="parallax" speed="8" sign="+">Soft skills slide</h1>
-        <h1 class="parallax" speed="12" sign="-">Soft skills slide</h1>
-        <h1 class="parallax" speed="16" sign="-">Soft skills slide</h1>
+        <h1 class="parallax">Soft skills slide</h1>
+        <h1 class="parallax">Soft skills slide</h1>
+        <h1 class="parallax">Soft skills slide</h1>
+        <h1 class="parallax">Soft skills slide</h1>
     </div>
 </section>
 
