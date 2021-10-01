@@ -1,15 +1,11 @@
 <script>
     import Template from "./ExperienceTamplate.svelte";
+    import { techSkills } from "./skills";
 
     const period = "2020 - 2021";
-    const techs = [
-        "JavaScript",
-        "React",
-        "Redux",
-        "NodeJS",
-        "MongoDB",
-        "Firebase",
-    ];
+    const techs = techSkills.motionSoftware
+        .sort((a, b) => a.weight - b.weight)
+        .map((x) => x.label);
     const orgs = ["Windows", "GitHub", "Telegram", "Agile"];
 </script>
 

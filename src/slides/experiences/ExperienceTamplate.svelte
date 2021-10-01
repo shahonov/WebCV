@@ -77,7 +77,6 @@
         .stacks {
             display: flex;
             margin-top: 1em;
-            align-items: center;
             justify-content: space-between;
 
             .tech-stack {
@@ -85,7 +84,6 @@
                 display: flex;
                 flex-wrap: wrap;
                 color: $darkGrey;
-                align-items: center;
                 justify-content: center;
                 transition: $transitionTime;
 
@@ -116,7 +114,6 @@
                 display: flex;
                 flex-wrap: wrap;
                 color: $darkGrey;
-                align-items: center;
                 justify-content: center;
                 transition: $transitionTime;
 

@@ -1,8 +1,12 @@
 <script>
     import Template from "./ExperienceTamplate.svelte";
+    import { techSkills } from "./skills";
 
     const period = "2021 - current";
-    const techs = ["Svelte", "GraphQL", "Postrges SQL", "Ruby on Rails"];
+    const techs = techSkills.clustermarket.sort(
+        (a, b) => a.weight - b.weight
+    ).map((x) => x.label);
+
     const orgs = ["Linux", "GitLab", "Slack", "Agile"];
 </script>
 
