@@ -1,9 +1,9 @@
 <script>
-    import { onMount, getContext } from "svelte";
+    import { onMount, getContext, onDestroy } from "svelte";
 
-    import Clustermarket from "./experiences/Clustermarket.svelte";
-    import MotionSoftware from "./experiences/MotionSoftware.svelte";
     import SbTech from "./experiences/SBTech.svelte";
+    import MotionSoftware from "./experiences/MotionSoftware.svelte";
+    import Clustermarket from "./experiences/Clustermarket.svelte";
 
     import { slidesConfig } from "./configuration";
 
@@ -30,6 +30,10 @@
 
     onMount(() => {
         slidesConfig.loadParallax();
+    });
+
+    onDestroy(() => {
+        slidesConfig.removeParallax();
     });
 </script>
 

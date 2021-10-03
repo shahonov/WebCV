@@ -1,5 +1,5 @@
 <script>
-    import { onMount, getContext } from "svelte";
+    import { onMount, getContext, onDestroy } from "svelte";
     import { slidesConfig } from "./configuration";
 
     const globals = getContext("global");
@@ -8,14 +8,18 @@
     onMount(() => {
         slidesConfig.loadParallax();
     });
+
+    onDestroy(() => {
+        slidesConfig.removeParallax();
+    });
 </script>
 
 <section in:inT out:outT class="slide">
     <div class="overview-slide">
-        <h1 class="parallax" sign='+'>Overview slide</h1>
-        <h1 class="parallax" sign='+'>Overview slide</h1>
-        <h1 class="parallax" sign='+'>Overview slide</h1>
-        <h1 class="parallax" sign='+'>Overview slide</h1>
+        <h1 class="parallax" sign="+">Overview slide</h1>
+        <h1 class="parallax" sign="+">Overview slide</h1>
+        <h1 class="parallax" sign="+">Overview slide</h1>
+        <h1 class="parallax" sign="+">Overview slide</h1>
     </div>
 </section>
 

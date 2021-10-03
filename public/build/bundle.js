@@ -248,6 +248,9 @@ var app = (function () {
     function onMount(fn) {
         get_current_component().$$.on_mount.push(fn);
     }
+    function onDestroy(fn) {
+        get_current_component().$$.on_destroy.push(fn);
+    }
     function setContext(key, context) {
         get_current_component().$$.context.set(key, context);
     }
@@ -818,38 +821,43 @@ var app = (function () {
         };
     }
 
+    function parallax(e) {
+        const divider = 100;
+        const parallaxElements = document.getElementsByClassName("parallax");
+
+        for (const element of parallaxElements) {
+            let x = 0;
+            let y = 0;
+            const screenCenterX = window.innerWidth / 2;
+            const screenCenterY = window.innerHeight / 2;
+            const speed = element.getAttribute("speed");
+
+            const mouseX = (screenCenterX - e.pageX);
+            const mouseY = (screenCenterY - e.pageY);
+            x = (mouseX / divider) * speed;
+            if (e.pageY < screenCenterY) {
+                y = (mouseY / divider) * speed;
+            } else if (e.pageY > screenCenterY) {
+                y = (mouseY / divider) * speed;
+            }
+
+            element.style.transform = `translateX(${x}px) translateY(${y}px)`;
+        }
+    }
+
     const slidesConfig = {
         speed: 500,
         loadParallax: () => {
-            const parallaxElements = document.getElementsByClassName("parallax");
-
             const speeds = ['1.2', '1.4', '1.6', '1.8'];
             for (const element of parallaxElements) {
                 const rndSpeed = speeds[Math.floor(Math.random() * speeds.length)];
                 element.setAttribute('speed', rndSpeed);
             }
 
-            const divider = 100;
-            window.addEventListener("mousemove", (e) => {
-                for (const element of parallaxElements) {
-                    let x = 0;
-                    let y = 0;
-                    const screenCenterX = window.innerWidth / 2;
-                    const screenCenterY = window.innerHeight / 2;
-                    const speed = element.getAttribute("speed");
-
-                    const mouseX = (screenCenterX - e.pageX);
-                    const mouseY = (screenCenterY - e.pageY);
-                    x = (mouseX / divider) * speed;
-                    if (e.pageY < screenCenterY) {
-                        y = (mouseY / divider) * speed;
-                    } else if (e.pageY > screenCenterY) {
-                        y = (mouseY / divider) * speed;
-                    }
-
-                    element.style.transform = `translateX(${x}px) translateY(${y}px)`;
-                }
-            });
+            window.addEventListener("mousemove", parallax);
+        },
+        removeParallax: () => {
+            window.removeEventListener('mousemove', parallax);
         }
     };
 
@@ -887,20 +895,20 @@ var app = (function () {
     			h13.textContent = "Overview slide";
     			attr_dev(h10, "class", "parallax svelte-1pw5oyt");
     			attr_dev(h10, "sign", "+");
-    			add_location(h10, file$9, 14, 8, 361);
+    			add_location(h10, file$9, 18, 8, 446);
     			attr_dev(h11, "class", "parallax svelte-1pw5oyt");
     			attr_dev(h11, "sign", "+");
-    			add_location(h11, file$9, 15, 8, 420);
+    			add_location(h11, file$9, 19, 8, 505);
     			attr_dev(h12, "class", "parallax svelte-1pw5oyt");
     			attr_dev(h12, "sign", "+");
-    			add_location(h12, file$9, 16, 8, 479);
+    			add_location(h12, file$9, 20, 8, 564);
     			attr_dev(h13, "class", "parallax svelte-1pw5oyt");
     			attr_dev(h13, "sign", "+");
-    			add_location(h13, file$9, 17, 8, 538);
+    			add_location(h13, file$9, 21, 8, 623);
     			attr_dev(div, "class", "overview-slide svelte-1pw5oyt");
-    			add_location(div, file$9, 13, 4, 323);
+    			add_location(div, file$9, 17, 4, 408);
     			attr_dev(section, "class", "slide svelte-1pw5oyt");
-    			add_location(section, file$9, 12, 0, 278);
+    			add_location(section, file$9, 16, 0, 363);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -961,6 +969,10 @@ var app = (function () {
     		slidesConfig.loadParallax();
     	});
 
+    	onDestroy(() => {
+    		slidesConfig.removeParallax();
+    	});
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -970,6 +982,7 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		onMount,
     		getContext,
+    		onDestroy,
     		slidesConfig,
     		globals,
     		inT,
@@ -999,22 +1012,22 @@ var app = (function () {
 
     function get_each_context$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[10] = list[i];
-    	child_ctx[12] = i;
+    	child_ctx[5] = list[i];
+    	child_ctx[7] = i;
     	return child_ctx;
     }
 
     function get_each_context_1$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[13] = list[i];
-    	child_ctx[12] = i;
+    	child_ctx[8] = list[i];
+    	child_ctx[7] = i;
     	return child_ctx;
     }
 
-    // (28:16) {#each techs as tech, i (i)}
+    // (20:16) {#each techs as tech, i (i)}
     function create_each_block_1$1(key_1, ctx) {
     	let li;
-    	let t0_value = /*tech*/ ctx[13] + "";
+    	let t0_value = /*tech*/ ctx[8] + "";
     	let t0;
     	let t1;
 
@@ -1026,8 +1039,7 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = space();
     			attr_dev(li, "class", "parallax svelte-3pfoe2");
-    			attr_dev(li, "speed", /*rndSpeed*/ ctx[3]());
-    			add_location(li, file$8, 28, 20, 799);
+    			add_location(li, file$8, 20, 20, 508);
     			this.first = li;
     		},
     		m: function mount(target, anchor) {
@@ -1037,7 +1049,7 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*techs*/ 2 && t0_value !== (t0_value = /*tech*/ ctx[13] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*techs*/ 2 && t0_value !== (t0_value = /*tech*/ ctx[8] + "")) set_data_dev(t0, t0_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -1048,17 +1060,17 @@ var app = (function () {
     		block,
     		id: create_each_block_1$1.name,
     		type: "each",
-    		source: "(28:16) {#each techs as tech, i (i)}",
+    		source: "(20:16) {#each techs as tech, i (i)}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (38:16) {#each orgs as org, i (i)}
+    // (30:16) {#each orgs as org, i (i)}
     function create_each_block$2(key_1, ctx) {
     	let li;
-    	let t0_value = /*org*/ ctx[10] + "";
+    	let t0_value = /*org*/ ctx[5] + "";
     	let t0;
     	let t1;
 
@@ -1070,8 +1082,7 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = space();
     			attr_dev(li, "class", "parallax svelte-3pfoe2");
-    			attr_dev(li, "speed", /*rndSpeed*/ ctx[3]());
-    			add_location(li, file$8, 38, 20, 1127);
+    			add_location(li, file$8, 30, 20, 817);
     			this.first = li;
     		},
     		m: function mount(target, anchor) {
@@ -1081,7 +1092,7 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*orgs*/ 4 && t0_value !== (t0_value = /*org*/ ctx[10] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*orgs*/ 4 && t0_value !== (t0_value = /*org*/ ctx[5] + "")) set_data_dev(t0, t0_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -1092,7 +1103,7 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(38:16) {#each orgs as org, i (i)}",
+    		source: "(30:16) {#each orgs as org, i (i)}",
     		ctx
     	});
 
@@ -1123,11 +1134,11 @@ var app = (function () {
     	let each_blocks = [];
     	let each1_lookup = new Map();
     	let current;
-    	const default_slot_template = /*#slots*/ ctx[5].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[4], null);
+    	const default_slot_template = /*#slots*/ ctx[4].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[3], null);
     	let each_value_1 = /*techs*/ ctx[1];
     	validate_each_argument(each_value_1);
-    	const get_key = ctx => /*i*/ ctx[12];
+    	const get_key = ctx => /*i*/ ctx[7];
     	validate_each_keys(ctx, each_value_1, get_each_context_1$1, get_key);
 
     	for (let i = 0; i < each_value_1.length; i += 1) {
@@ -1138,7 +1149,7 @@ var app = (function () {
 
     	let each_value = /*orgs*/ ctx[2];
     	validate_each_argument(each_value);
-    	const get_key_1 = ctx => /*i*/ ctx[12];
+    	const get_key_1 = ctx => /*i*/ ctx[7];
     	validate_each_keys(ctx, each_value, get_each_context$2, get_key_1);
 
     	for (let i = 0; i < each_value.length; i += 1) {
@@ -1181,31 +1192,29 @@ var app = (function () {
     			}
 
     			attr_dev(h3, "class", "parallax");
-    			attr_dev(h3, "speed", /*rndSpeed*/ ctx[3]());
-    			add_location(h3, file$8, 16, 8, 413);
+    			add_location(h3, file$8, 8, 8, 160);
     			attr_dev(div0, "class", "period svelte-3pfoe2");
-    			add_location(div0, file$8, 15, 4, 383);
+    			add_location(div0, file$8, 7, 4, 130);
     			attr_dev(p, "class", "parallax svelte-3pfoe2");
-    			attr_dev(p, "speed", /*rndSpeed*/ ctx[3]());
-    			add_location(p, file$8, 19, 8, 516);
+    			add_location(p, file$8, 11, 8, 244);
     			attr_dev(div1, "class", "overview svelte-3pfoe2");
-    			add_location(div1, file$8, 18, 4, 484);
+    			add_location(div1, file$8, 10, 4, 212);
     			attr_dev(h40, "class", "parallax svelte-3pfoe2");
-    			add_location(h40, file$8, 25, 12, 677);
+    			add_location(h40, file$8, 17, 12, 386);
     			attr_dev(ul0, "class", "svelte-3pfoe2");
-    			add_location(ul0, file$8, 26, 12, 727);
+    			add_location(ul0, file$8, 18, 12, 436);
     			attr_dev(div2, "class", "tech-stack svelte-3pfoe2");
-    			add_location(div2, file$8, 24, 8, 639);
+    			add_location(div2, file$8, 16, 8, 348);
     			attr_dev(h41, "class", "parallax svelte-3pfoe2");
-    			add_location(h41, file$8, 35, 12, 1005);
+    			add_location(h41, file$8, 27, 12, 695);
     			attr_dev(ul1, "class", "svelte-3pfoe2");
-    			add_location(ul1, file$8, 36, 12, 1057);
+    			add_location(ul1, file$8, 28, 12, 747);
     			attr_dev(div3, "class", "org-stack svelte-3pfoe2");
-    			add_location(div3, file$8, 34, 8, 968);
+    			add_location(div3, file$8, 26, 8, 658);
     			attr_dev(div4, "class", "stacks svelte-3pfoe2");
-    			add_location(div4, file$8, 23, 4, 609);
+    			add_location(div4, file$8, 15, 4, 318);
     			attr_dev(div5, "class", "experience-details svelte-3pfoe2");
-    			add_location(div5, file$8, 14, 0, 345);
+    			add_location(div5, file$8, 6, 0, 92);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1250,28 +1259,28 @@ var app = (function () {
     			if (!current || dirty & /*period*/ 1) set_data_dev(t0, /*period*/ ctx[0]);
 
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty & /*$$scope*/ 16)) {
+    				if (default_slot.p && (!current || dirty & /*$$scope*/ 8)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[4],
+    						/*$$scope*/ ctx[3],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[4])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[4], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[3])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[3], dirty, null),
     						null
     					);
     				}
     			}
 
-    			if (dirty & /*rndSpeed, techs*/ 10) {
+    			if (dirty & /*techs*/ 2) {
     				each_value_1 = /*techs*/ ctx[1];
     				validate_each_argument(each_value_1);
     				validate_each_keys(ctx, each_value_1, get_each_context_1$1, get_key);
     				each_blocks_1 = update_keyed_each(each_blocks_1, dirty, get_key, 1, ctx, each_value_1, each0_lookup, ul0, destroy_block, create_each_block_1$1, null, get_each_context_1$1);
     			}
 
-    			if (dirty & /*rndSpeed, orgs*/ 12) {
+    			if (dirty & /*orgs*/ 4) {
     				each_value = /*orgs*/ ctx[2];
     				validate_each_argument(each_value);
     				validate_each_keys(ctx, each_value, get_each_context$2, get_key_1);
@@ -1318,11 +1327,6 @@ var app = (function () {
     	let { period } = $$props;
     	let { techs } = $$props;
     	let { orgs } = $$props;
-    	const rnd = max => Math.floor(Math.random() * max);
-    	const signs = ["+", "-"];
-    	const speeds = ["1", "1.2", "1.4", "1.6"];
-    	const rndSign = () => signs[rnd(signs.length)];
-    	const rndSpeed = () => speeds[rnd(speeds.length)];
     	const writable_props = ['period', 'techs', 'orgs'];
 
     	Object.keys($$props).forEach(key => {
@@ -1333,19 +1337,10 @@ var app = (function () {
     		if ('period' in $$props) $$invalidate(0, period = $$props.period);
     		if ('techs' in $$props) $$invalidate(1, techs = $$props.techs);
     		if ('orgs' in $$props) $$invalidate(2, orgs = $$props.orgs);
-    		if ('$$scope' in $$props) $$invalidate(4, $$scope = $$props.$$scope);
+    		if ('$$scope' in $$props) $$invalidate(3, $$scope = $$props.$$scope);
     	};
 
-    	$$self.$capture_state = () => ({
-    		period,
-    		techs,
-    		orgs,
-    		rnd,
-    		signs,
-    		speeds,
-    		rndSign,
-    		rndSpeed
-    	});
+    	$$self.$capture_state = () => ({ period, techs, orgs });
 
     	$$self.$inject_state = $$props => {
     		if ('period' in $$props) $$invalidate(0, period = $$props.period);
@@ -1357,7 +1352,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [period, techs, orgs, rndSpeed, $$scope, slots];
+    	return [period, techs, orgs, $$scope, slots];
     }
 
     class ExperienceTamplate extends SvelteComponentDev {
@@ -1413,60 +1408,83 @@ var app = (function () {
     	}
     }
 
+    const skillType = {
+        fe: 'front-end',
+        be: 'back-end'
+    };
+
     const techSkills = {
         sbTech: [
-            { label: ".NET Core", weight: 8 },
-            { label: "MS SQL", weight: 9 },
-            { label: "React", weight: 2 },
-            { label: "MobX", weight: 4 },
-            { label: "TypeScript", weight: 5 }
+            { label: ".NET Core", weight: 8, type: skillType.be },
+            { label: "MS SQL", weight: 9, type: skillType.be },
+            { label: "React", weight: 2, type: skillType.fe },
+            { label: "MobX", weight: 4, type: skillType.fe },
+            { label: "TypeScript", weight: 5, type: skillType.fe }
         ],
         motionSoftware: [
-            { label: "JavaScript", weight: 1 },
-            { label: "React", weight: 2 },
-            { label: "Redux", weight: 3 },
-            { label: "NodeJS", weight: 6 },
-            { label: "MongoDB", weight: 7 },
-            { label: "Firebase", weight: 11 },
+            { label: "JavaScript", weight: 1, type: skillType.fe },
+            { label: "React", weight: 2, type: skillType.fe },
+            { label: "Redux", weight: 3, type: skillType.fe },
+            { label: "NodeJS", weight: 6, type: skillType.be },
+            { label: "MongoDB", weight: 7, type: skillType.be },
+            { label: "Firebase", weight: 11, type: skillType.be },
         ],
         clustermarket: [
-            { label: "Svelte", weight: 10 },
-            { label: "GraphQL", weight: 12 },
-            { label: "Postrges SQL", weight: 13 },
-            { label: "Ruby on Rails", weight: 14 }
+            { label: "Svelte", weight: 10, type: skillType.fe },
+            { label: "GraphQL", weight: 12, type: skillType.be },
+            { label: "Postrges SQL", weight: 13, type: skillType.be },
+            { label: "Ruby on Rails", weight: 14, type: skillType.be }
         ],
         others: [
-            { label: "HTML", weight: 1 },
-            { label: "CSS", weight: 1 },
-            { label: "SASS", weight: 1 },
+            { label: "HTML", weight: 1, type: skillType.fe },
+            { label: "CSS", weight: 1, type: skillType.fe },
+            { label: "SASS", weight: 1, type: skillType.fe },
         ]
     };
 
-    /* src\slides\experiences\Clustermarket.svelte generated by Svelte v3.43.0 */
-    const file$7 = "src\\slides\\experiences\\Clustermarket.svelte";
+    /* src\slides\experiences\SBTech.svelte generated by Svelte v3.43.0 */
+    const file$7 = "src\\slides\\experiences\\SBTech.svelte";
 
-    // (13:0) <Template {period} {techs} {orgs}>
+    // (12:0) <Template {period} {techs} {orgs}>
     function create_default_slot$2(ctx) {
     	let t0;
-    	let br;
+    	let br0;
     	let t1;
+    	let br1;
+    	let t2;
+    	let br2;
+    	let t3;
 
     	const block = {
     		c: function create() {
-    			t0 = text("Product company, developing an online platform for booking and managing\r\n    scientific resources for laboratories.\r\n    ");
-    			br = element("br");
-    			t1 = text("\r\n    Some of the main clients are: Harvard University, Oxford University, etc.");
-    			add_location(br, file$7, 15, 4, 501);
+    			t0 = text("Product company, developing an end-to-end e-gambling solutions.\r\n    ");
+    			br0 = element("br");
+    			t1 = text("\r\n    Our team was responsible for markets and configurations,\r\n    ");
+    			br1 = element("br");
+    			t2 = text("\r\n    maintaing over 30 microservices (REST APIs),\r\n    ");
+    			br2 = element("br");
+    			t3 = text("\r\n    as well as internal front-end tracking utilities.");
+    			add_location(br0, file$7, 13, 4, 441);
+    			add_location(br1, file$7, 15, 4, 515);
+    			add_location(br2, file$7, 17, 4, 577);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t0, anchor);
-    			insert_dev(target, br, anchor);
+    			insert_dev(target, br0, anchor);
     			insert_dev(target, t1, anchor);
+    			insert_dev(target, br1, anchor);
+    			insert_dev(target, t2, anchor);
+    			insert_dev(target, br2, anchor);
+    			insert_dev(target, t3, anchor);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(br);
+    			if (detaching) detach_dev(br0);
     			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(br1);
+    			if (detaching) detach_dev(t2);
+    			if (detaching) detach_dev(br2);
+    			if (detaching) detach_dev(t3);
     		}
     	};
 
@@ -1474,7 +1492,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$2.name,
     		type: "slot",
-    		source: "(13:0) <Template {period} {techs} {orgs}>",
+    		source: "(12:0) <Template {period} {techs} {orgs}>",
     		ctx
     	});
 
@@ -1541,17 +1559,17 @@ var app = (function () {
     	return block;
     }
 
-    const period$2 = "2021 - current";
+    const period$2 = "2018 - 2020";
 
     function instance$7($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
-    	validate_slots('Clustermarket', slots, []);
-    	const techs = techSkills.clustermarket.sort((a, b) => a.weight - b.weight).map(x => x.label);
-    	const orgs = ["Linux", "GitLab", "Slack", "Agile"];
+    	validate_slots('SBTech', slots, []);
+    	const techs = techSkills.sbTech.sort((a, b) => a.weight - b.weight).map(x => x.label);
+    	const orgs = ["Windows", "Jira", "Slack", "Agile"];
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Clustermarket> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<SBTech> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$capture_state = () => ({
@@ -1565,14 +1583,14 @@ var app = (function () {
     	return [techs, orgs];
     }
 
-    class Clustermarket extends SvelteComponentDev {
+    class SBTech extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
     		init(this, options, instance$7, create_fragment$7, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
-    			tagName: "Clustermarket",
+    			tagName: "SBTech",
     			options,
     			id: create_fragment$7.name
     		});
@@ -1716,49 +1734,31 @@ var app = (function () {
     	}
     }
 
-    /* src\slides\experiences\SBTech.svelte generated by Svelte v3.43.0 */
-    const file$5 = "src\\slides\\experiences\\SBTech.svelte";
+    /* src\slides\experiences\Clustermarket.svelte generated by Svelte v3.43.0 */
+    const file$5 = "src\\slides\\experiences\\Clustermarket.svelte";
 
-    // (12:0) <Template {period} {techs} {orgs}>
+    // (13:0) <Template {period} {techs} {orgs}>
     function create_default_slot(ctx) {
     	let t0;
-    	let br0;
+    	let br;
     	let t1;
-    	let br1;
-    	let t2;
-    	let br2;
-    	let t3;
 
     	const block = {
     		c: function create() {
-    			t0 = text("Product company, developing an end-to-end e-gambling solutions.\r\n    ");
-    			br0 = element("br");
-    			t1 = text("\r\n    Our team was responsible for markets and configurations,\r\n    ");
-    			br1 = element("br");
-    			t2 = text("\r\n    maintaing over 30 microservices (REST APIs),\r\n    ");
-    			br2 = element("br");
-    			t3 = text("\r\n    as well as internal front-end tracking utilities.");
-    			add_location(br0, file$5, 13, 4, 441);
-    			add_location(br1, file$5, 15, 4, 515);
-    			add_location(br2, file$5, 17, 4, 577);
+    			t0 = text("Product company, developing an online platform for booking and managing\r\n    scientific resources for laboratories.\r\n    ");
+    			br = element("br");
+    			t1 = text("\r\n    Some of the main clients are: Harvard University, Oxford University, etc.");
+    			add_location(br, file$5, 15, 4, 501);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t0, anchor);
-    			insert_dev(target, br0, anchor);
+    			insert_dev(target, br, anchor);
     			insert_dev(target, t1, anchor);
-    			insert_dev(target, br1, anchor);
-    			insert_dev(target, t2, anchor);
-    			insert_dev(target, br2, anchor);
-    			insert_dev(target, t3, anchor);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(br0);
+    			if (detaching) detach_dev(br);
     			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(br1);
-    			if (detaching) detach_dev(t2);
-    			if (detaching) detach_dev(br2);
-    			if (detaching) detach_dev(t3);
     		}
     	};
 
@@ -1766,7 +1766,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(12:0) <Template {period} {techs} {orgs}>",
+    		source: "(13:0) <Template {period} {techs} {orgs}>",
     		ctx
     	});
 
@@ -1833,17 +1833,17 @@ var app = (function () {
     	return block;
     }
 
-    const period = "2018 - 2020";
+    const period = "2021 - current";
 
     function instance$5($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
-    	validate_slots('SBTech', slots, []);
-    	const techs = techSkills.sbTech.sort((a, b) => a.weight - b.weight).map(x => x.label);
-    	const orgs = ["Windows", "Jira", "Slack", "Agile"];
+    	validate_slots('Clustermarket', slots, []);
+    	const techs = techSkills.clustermarket.sort((a, b) => a.weight - b.weight).map(x => x.label);
+    	const orgs = ["Linux", "GitLab", "Slack", "Agile"];
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<SBTech> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Clustermarket> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$capture_state = () => ({
@@ -1857,14 +1857,14 @@ var app = (function () {
     	return [techs, orgs];
     }
 
-    class SBTech extends SvelteComponentDev {
+    class Clustermarket extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
     		init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
-    			tagName: "SBTech",
+    			tagName: "Clustermarket",
     			options,
     			id: create_fragment$5.name
     		});
@@ -1883,7 +1883,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (39:12) {#each Object.keys(tabs) as tab, i (i)}
+    // (43:12) {#each Object.keys(tabs) as tab, i (i)}
     function create_each_block$1(key_1, ctx) {
     	let h4;
     	let t0_value = /*tab*/ ctx[8] + "";
@@ -1905,7 +1905,7 @@ var app = (function () {
     			t1 = space();
     			attr_dev(h4, "class", "tab svelte-pqzgg0");
     			toggle_class(h4, "active", /*tab*/ ctx[8] === /*currentTab*/ ctx[0]);
-    			add_location(h4, file$4, 39, 16, 1116);
+    			add_location(h4, file$4, 43, 16, 1201);
     			this.first = h4;
     		},
     		m: function mount(target, anchor) {
@@ -1936,7 +1936,7 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(39:12) {#each Object.keys(tabs) as tab, i (i)}",
+    		source: "(43:12) {#each Object.keys(tabs) as tab, i (i)}",
     		ctx
     	});
 
@@ -1991,13 +1991,13 @@ var app = (function () {
     			if (switch_instance) create_component(switch_instance.$$.fragment);
     			attr_dev(nav, "class", "tabs parallax svelte-pqzgg0");
     			attr_dev(nav, "sign", "-");
-    			add_location(nav, file$4, 37, 8, 1009);
+    			add_location(nav, file$4, 41, 8, 1094);
     			attr_dev(div0, "class", "content svelte-pqzgg0");
-    			add_location(div0, file$4, 48, 8, 1376);
+    			add_location(div0, file$4, 52, 8, 1461);
     			attr_dev(div1, "class", "experience-slide svelte-pqzgg0");
-    			add_location(div1, file$4, 36, 4, 969);
+    			add_location(div1, file$4, 40, 4, 1054);
     			attr_dev(section, "class", "slide svelte-pqzgg0");
-    			add_location(section, file$4, 35, 0, 924);
+    			add_location(section, file$4, 39, 0, 1009);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2124,6 +2124,10 @@ var app = (function () {
     		slidesConfig.loadParallax();
     	});
 
+    	onDestroy(() => {
+    		slidesConfig.removeParallax();
+    	});
+
     	const writable_props = [];
 
     	Object_1$1.keys($$props).forEach(key => {
@@ -2135,9 +2139,10 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		onMount,
     		getContext,
-    		Clustermarket,
-    		MotionSoftware,
+    		onDestroy,
     		SbTech: SBTech,
+    		MotionSoftware,
+    		Clustermarket,
     		slidesConfig,
     		tabs,
     		currentTab,
@@ -2213,17 +2218,17 @@ var app = (function () {
     			h13 = element("h1");
     			h13.textContent = "Soft skills slide";
     			attr_dev(h10, "class", "parallax svelte-10rzjuv");
-    			add_location(h10, file$3, 14, 8, 364);
+    			add_location(h10, file$3, 18, 8, 449);
     			attr_dev(h11, "class", "parallax svelte-10rzjuv");
-    			add_location(h11, file$3, 15, 8, 417);
+    			add_location(h11, file$3, 19, 8, 502);
     			attr_dev(h12, "class", "parallax svelte-10rzjuv");
-    			add_location(h12, file$3, 16, 8, 470);
+    			add_location(h12, file$3, 20, 8, 555);
     			attr_dev(h13, "class", "parallax svelte-10rzjuv");
-    			add_location(h13, file$3, 17, 8, 523);
+    			add_location(h13, file$3, 21, 8, 608);
     			attr_dev(div, "class", "soft-skills-slide svelte-10rzjuv");
-    			add_location(div, file$3, 13, 4, 323);
+    			add_location(div, file$3, 17, 4, 408);
     			attr_dev(section, "class", "slide svelte-10rzjuv");
-    			add_location(section, file$3, 12, 0, 278);
+    			add_location(section, file$3, 16, 0, 363);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2284,6 +2289,10 @@ var app = (function () {
     		slidesConfig.loadParallax();
     	});
 
+    	onDestroy(() => {
+    		slidesConfig.removeParallax();
+    	});
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -2293,6 +2302,7 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		onMount,
     		getContext,
+    		onDestroy,
     		slidesConfig,
     		globals,
     		inT,
@@ -2335,11 +2345,11 @@ var app = (function () {
     			h1.textContent = "Playground slide";
     			attr_dev(h1, "class", "parallax svelte-1rmma01");
     			attr_dev(h1, "sign", "-");
-    			add_location(h1, file$2, 14, 8, 363);
+    			add_location(h1, file$2, 18, 8, 448);
     			attr_dev(div, "class", "playground-slide svelte-1rmma01");
-    			add_location(div, file$2, 13, 4, 323);
+    			add_location(div, file$2, 17, 4, 408);
     			attr_dev(section, "class", "slide svelte-1rmma01");
-    			add_location(section, file$2, 12, 0, 278);
+    			add_location(section, file$2, 16, 0, 363);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2394,6 +2404,10 @@ var app = (function () {
     		slidesConfig.loadParallax();
     	});
 
+    	onDestroy(() => {
+    		slidesConfig.removeParallax();
+    	});
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -2403,6 +2417,7 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		onMount,
     		getContext,
+    		onDestroy,
     		slidesConfig,
     		globals,
     		inT,
@@ -2459,17 +2474,17 @@ var app = (function () {
     			h13 = element("h1");
     			h13.textContent = "Technical skills slide";
     			attr_dev(h10, "class", "parallax svelte-15xs4t9");
-    			add_location(h10, file$1, 14, 8, 369);
+    			add_location(h10, file$1, 18, 8, 454);
     			attr_dev(h11, "class", "parallax svelte-15xs4t9");
-    			add_location(h11, file$1, 15, 8, 427);
+    			add_location(h11, file$1, 19, 8, 512);
     			attr_dev(h12, "class", "parallax svelte-15xs4t9");
-    			add_location(h12, file$1, 16, 8, 485);
+    			add_location(h12, file$1, 20, 8, 570);
     			attr_dev(h13, "class", "parallax svelte-15xs4t9");
-    			add_location(h13, file$1, 17, 8, 543);
+    			add_location(h13, file$1, 21, 8, 628);
     			attr_dev(div, "class", "technical-skills-slide svelte-15xs4t9");
-    			add_location(div, file$1, 13, 4, 323);
+    			add_location(div, file$1, 17, 4, 408);
     			attr_dev(section, "class", "slide svelte-15xs4t9");
-    			add_location(section, file$1, 12, 0, 278);
+    			add_location(section, file$1, 16, 0, 363);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2530,6 +2545,10 @@ var app = (function () {
     		slidesConfig.loadParallax();
     	});
 
+    	onDestroy(() => {
+    		slidesConfig.removeParallax();
+    	});
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -2539,6 +2558,7 @@ var app = (function () {
     	$$self.$capture_state = () => ({
     		onMount,
     		getContext,
+    		onDestroy,
     		slidesConfig,
     		globals,
     		inT,
@@ -2608,7 +2628,7 @@ var app = (function () {
     			t1 = space();
     			attr_dev(div, "class", "nav-control svelte-1fd4b3t");
     			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[19]);
-    			add_location(div, file, 109, 4, 3063);
+    			add_location(div, file, 109, 4, 3061);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -2668,7 +2688,7 @@ var app = (function () {
     			t1 = space();
     			attr_dev(div, "class", "nav-control svelte-1fd4b3t");
     			toggle_class(div, "active", /*currentSlide*/ ctx[0] === /*control*/ ctx[19]);
-    			add_location(div, file, 209, 4, 5399);
+    			add_location(div, file, 209, 4, 5397);
     			this.first = div;
     		},
     		m: function mount(target, anchor) {
@@ -2791,33 +2811,33 @@ var app = (function () {
     			}
 
     			attr_dev(div0, "class", "top-controls svelte-1fd4b3t");
-    			add_location(div0, file, 107, 2, 2989);
+    			add_location(div0, file, 107, 2, 2987);
     			attr_dev(path0, "d", "m213.667969 \r\n\t\t\t\t\t181.332031c0 \r\n\t\t\t\t\t4.269531-1.28125 \r\n\t\t\t\t\t8.535157-3.628907 \r\n\t\t\t\t\t11.734375l-106.664062 \r\n\t\t\t\t\t160c-3.839844 \r\n\t\t\t\t\t5.761719-10.242188 \r\n\t\t\t\t\t9.601563-17.707031 \r\n\t\t\t\t\t9.601563h-64c-11.734375 \r\n\t\t\t\t\t0-21.335938-9.601563-21.335938-21.335938 \r\n\t\t\t\t\t0-4.265625 \r\n\t\t\t\t\t1.28125-8.53125 \r\n\t\t\t\t\t3.628907-11.730469l98.773437-148.269531-98.773437-148.265625c-2.347657-3.199218-3.628907-7.464844-3.628907-11.734375 \r\n\t\t\t\t\t0-11.730469 \r\n\t\t\t\t\t9.601563-21.332031 \r\n\t\t\t\t\t21.335938-21.332031h64c7.464843 \r\n\t\t\t\t\t0 \r\n\t\t\t\t\t13.867187 \r\n\t\t\t\t\t3.839844 \r\n\t\t\t\t\t17.707031 \r\n\t\t\t\t\t9.601562l106.664062 \r\n\t\t\t\t\t160c2.347657 \r\n\t\t\t\t\t3.199219 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t7.464844 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t11.730469zm0 \r\n\t\t\t\t\t0");
-    			add_location(path0, file, 129, 4, 3486);
+    			add_location(path0, file, 129, 4, 3484);
     			attr_dev(svg0, "fill", /*prevArrowColor*/ ctx[2]);
     			attr_dev(svg0, "viewBox", "-74 0 362 362.66667");
     			attr_dev(svg0, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg0, "class", "svelte-1fd4b3t");
-    			add_location(svg0, file, 124, 3, 3368);
+    			add_location(svg0, file, 124, 3, 3366);
     			attr_dev(div1, "class", "left-arrow svelte-1fd4b3t");
-    			add_location(div1, file, 118, 2, 3244);
+    			add_location(div1, file, 118, 2, 3242);
     			attr_dev(div2, "class", "content svelte-1fd4b3t");
-    			add_location(div2, file, 161, 2, 4244);
+    			add_location(div2, file, 161, 2, 4242);
     			attr_dev(path1, "d", "m213.667969 \r\n\t\t\t\t\t181.332031c0 \r\n\t\t\t\t\t4.269531-1.28125 \r\n\t\t\t\t\t8.535157-3.628907 \r\n\t\t\t\t\t11.734375l-106.664062 \r\n\t\t\t\t\t160c-3.839844 \r\n\t\t\t\t\t5.761719-10.242188 \r\n\t\t\t\t\t9.601563-17.707031 \r\n\t\t\t\t\t9.601563h-64c-11.734375 \r\n\t\t\t\t\t0-21.335938-9.601563-21.335938-21.335938 \r\n\t\t\t\t\t0-4.265625 \r\n\t\t\t\t\t1.28125-8.53125 \r\n\t\t\t\t\t3.628907-11.730469l98.773437-148.269531-98.773437-148.265625c-2.347657-3.199218-3.628907-7.464844-3.628907-11.734375 \r\n\t\t\t\t\t0-11.730469 \r\n\t\t\t\t\t9.601563-21.332031 \r\n\t\t\t\t\t21.335938-21.332031h64c7.464843 \r\n\t\t\t\t\t0 \r\n\t\t\t\t\t13.867187 \r\n\t\t\t\t\t3.839844 \r\n\t\t\t\t\t17.707031 \r\n\t\t\t\t\t9.601562l106.664062 \r\n\t\t\t\t\t160c2.347657 \r\n\t\t\t\t\t3.199219 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t7.464844 \r\n\t\t\t\t\t3.628907 \r\n\t\t\t\t\t11.730469zm0 \r\n\t\t\t\t\t0");
-    			add_location(path1, file, 175, 4, 4564);
+    			add_location(path1, file, 175, 4, 4562);
     			attr_dev(svg1, "fill", /*nextArrowColor*/ ctx[1]);
     			attr_dev(svg1, "viewBox", "-74 0 362 362.66667");
     			attr_dev(svg1, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg1, "class", "svelte-1fd4b3t");
-    			add_location(svg1, file, 170, 3, 4446);
+    			add_location(svg1, file, 170, 3, 4444);
     			attr_dev(div3, "class", "right-arrow svelte-1fd4b3t");
-    			add_location(div3, file, 164, 2, 4321);
+    			add_location(div3, file, 164, 2, 4319);
     			attr_dev(div4, "class", "bottom-controls svelte-1fd4b3t");
-    			add_location(div4, file, 207, 2, 5322);
+    			add_location(div4, file, 207, 2, 5320);
     			attr_dev(div5, "class", "main-screen svelte-1fd4b3t");
-    			add_location(div5, file, 106, 1, 2960);
+    			add_location(div5, file, 106, 1, 2958);
     			attr_dev(main, "class", "svelte-1fd4b3t");
-    			add_location(main, file, 105, 0, 2951);
+    			add_location(main, file, 105, 0, 2949);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2967,7 +2987,7 @@ var app = (function () {
     		["Playground"]: PlaygroundSlide
     	};
 
-    	let currentSlide = "Experience";
+    	let currentSlide = "Overview";
 
     	function changeSlide(slide) {
     		if (slide !== currentSlide) {

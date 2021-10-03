@@ -2,22 +2,14 @@
     export let period;
     export let techs;
     export let orgs;
-
-    const rnd = (max) => Math.floor(Math.random() * max);
-
-    const signs = ["+", "-"];
-    const speeds = ["1", "1.2", "1.4", "1.6"];
-
-    const rndSign = () => signs[rnd(signs.length)];
-    const rndSpeed = () => speeds[rnd(speeds.length)];
 </script>
 
 <div class="experience-details">
     <div class="period">
-        <h3 class="parallax" speed={rndSpeed()}>{period}</h3>
+        <h3 class="parallax">{period}</h3>
     </div>
     <div class="overview">
-        <p class="parallax" speed={rndSpeed()}>
+        <p class="parallax">
             <slot />
         </p>
     </div>
@@ -26,7 +18,7 @@
             <h4 class="parallax">Tech stack</h4>
             <ul>
                 {#each techs as tech, i (i)}
-                    <li class="parallax" speed={rndSpeed()}>
+                    <li class="parallax">
                         {tech}
                     </li>
                 {/each}
@@ -36,7 +28,7 @@
             <h4 class="parallax">Organisation</h4>
             <ul>
                 {#each orgs as org, i (i)}
-                    <li class="parallax" speed={rndSpeed()}>
+                    <li class="parallax">
                         {org}
                     </li>
                 {/each}
