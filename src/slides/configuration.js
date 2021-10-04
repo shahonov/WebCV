@@ -26,6 +26,7 @@ export const slidesConfig = {
     speed: 500,
     loadParallax: () => {
         const speeds = ['1.2', '1.4', '1.6', '1.8'];
+        const parallaxElements = document.getElementsByClassName("parallax");
         for (const element of parallaxElements) {
             const rndSpeed = speeds[Math.floor(Math.random() * speeds.length)];
             element.setAttribute('speed', rndSpeed);
