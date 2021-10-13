@@ -1,7 +1,18 @@
 <script>
+    import { onDestroy, onMount } from "svelte";
+    import { slidesConfig } from "../configuration";
+
     export let period;
     export let techs;
     export let orgs;
+
+    onMount(() => {
+        slidesConfig.loadParallax();
+    });
+
+    onDestroy(() => {
+        slidesConfig.removeParallax();
+    });
 </script>
 
 <div class="experience-details">

@@ -1,5 +1,5 @@
 <script>
-    import { onMount, getContext, onDestroy } from "svelte";
+    import { getContext } from "svelte";
 
     import SbTech from "./experiences/SBTech.svelte";
     import MotionSoftware from "./experiences/MotionSoftware.svelte";
@@ -27,19 +27,11 @@
 
     const globals = getContext("global");
     const { inT, outT } = globals;
-
-    onMount(() => {
-        slidesConfig.loadParallax();
-    });
-
-    onDestroy(() => {
-        slidesConfig.removeParallax();
-    });
 </script>
 
 <section in:inT out:outT class="slide">
     <div class="experience-slide">
-        <nav class="tabs parallax" sign="-">
+        <nav class="tabs">
             {#each Object.keys(tabs) as tab, i (i)}
                 <h4
                     class="tab"

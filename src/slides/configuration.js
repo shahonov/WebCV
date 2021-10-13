@@ -1,7 +1,6 @@
 function parallax(e) {
     const divider = 100;
     const parallaxElements = document.getElementsByClassName("parallax");
-
     for (const element of parallaxElements) {
         let x = 0;
         let y = 0;
@@ -22,19 +21,24 @@ function parallax(e) {
     }
 }
 
+export let isParallaxLoaded = false;
 export const slidesConfig = {
     speed: 500,
     loadParallax: () => {
-        const speeds = ['1.2', '1.4', '1.6', '1.8'];
-        const parallaxElements = document.getElementsByClassName("parallax");
-        for (const element of parallaxElements) {
-            const rndSpeed = speeds[Math.floor(Math.random() * speeds.length)];
-            element.setAttribute('speed', rndSpeed);
-        }
+        if (!isParallaxLoaded) {
+            const speeds = ['1.2', '1.4', '1.6', '1.8'];
+            const parallaxElements = document.getElementsByClassName("parallax");
+            for (const element of parallaxElements) {
+                const rndSpeed = speeds[Math.floor(Math.random() * speeds.length)];
+                element.setAttribute('speed', rndSpeed);
+            }
 
-        window.addEventListener("mousemove", parallax);
+            window.addEventListener("mousemove", parallax);
+        }
     },
     removeParallax: () => {
-        window.removeEventListener('mousemove', parallax);
+        if (isParallaxLoaded) {
+            window.removeEventListener('mousemove', parallax);
+        }
     }
 }
