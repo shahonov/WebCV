@@ -24,37 +24,34 @@
                 const foundItem = skills.find((x) => x.label === label);
                 if (!foundItem) {
                     if (orgTechSkill.type === skillType) {
-                        const first = skills[0];
-                        const last = skills[skills.length - 1];
-                        if (orgTechSkill.weight > last?.weight) {
-                            skills.push({ label, weight });
-                        } else if (orgTechSkill.weight < first?.weight) {
-                            skills.unshift({ label, weight });
-                        } else {
-                            skills.push({ label, weight });
-                        }
+                        skills.push({ label, weight });
                     }
                 }
             }
         }
-        return skills;
+        const sorted = skills.sort((a, b) => a.weight - b.weight);
+        return sorted;
     };
 
     const frontEndSkills = extractOrderedTechSkills(skillType.fe);
     const backEndSkills = extractOrderedTechSkills(skillType.be);
-
-    console.log(frontEndSkills);
-    console.log(backEndSkills);
 </script>
 
 <section in:inT out:outT class="slide">
     <div class="technical-skills-slide">
         <h4>Technical skills</h4>
-        <!-- <ul>
-            {#each techSkills as techSkill, i (i)}
-                <li>{techSkill.label}</li>
-            {/each}
-        </ul> -->
+        <div class="tech-skills-wrapper">
+            <ul>
+                {#each frontEndSkills as techSkill, i (i)}
+                    <li>{techSkill.label}</li>
+                {/each}
+            </ul>
+            <ul>
+                {#each backEndSkills as techSkill, i (i)}
+                    <li>{techSkill.label}</li>
+                {/each}
+            </ul>
+        </div>
     </div>
 </section>
 
